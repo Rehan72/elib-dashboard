@@ -2,9 +2,38 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Link } from "react-router-dom"
-
+import { useMutation } from "@tanstack/react-query"
+import { useRef } from "react"
+import { Link, useNavigate } from "react-router-dom"
+import { register } from "@/http/api"
+import { LoaderCircle } from "lucide-react"
 function RegisterPage() {
+  const navigate=useNavigate()
+  const nameRef=useRef<HTMLInputElement>(null)
+  const emailRef=useRef<HTMLInputElement>(null);
+  const passwordRef=useRef<HTMLInputElement>(null);
+  // Mutations
+  const mutation = useMutation({
+    mutationFn: register,
+    onSuccess: () => {
+     console.log("Relisted successful");
+     navigate('/auth/login');
+    },
+
+  })
+
+  const handleRegisterSubmit=() => {
+    const name = nameRef.current?.value
+    const email=emailRef?.current?.value;
+    const password=passwordRef?.current?.value;
+ console.log("Data", email, password);
+ 
+    //Make server call
+    if(!name || !email || !password){
+      return alert("Please enter your email and password");
+    }
+    mutation.mutate({name,email, password});
+  };
   return (
  <section className="flex justify-center items-center h-screen">
      <Card  className="mx-auto max-w-sm">
@@ -18,17 +47,15 @@ function RegisterPage() {
         <div className="grid gap-4">
           <div className="w-full max-w-sm">
             <div className="grid gap-2">
-              <Label htmlFor="first-name">First name</Label>
-              <Input id="first-name" placeholder="Max" required />
+              <Label htmlFor="name">Name*</Label>
+              <Input ref={nameRef}  id="name" placeholder="Name" required />
             </div>
-            {/* <div className="grid gap-2">
-              <Label htmlFor="last-name">Last name</Label>
-              <Input id="last-name" placeholder="Robinson" required />
-            </div> */}
+            
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">Email*</Label>
             <Input
+              ref={emailRef}
               id="email"
               type="email"
               placeholder="m@example.com"
@@ -36,11 +63,16 @@ function RegisterPage() {
             />
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="password">Password</Label>
-            <Input id="password" type="password" />
+            <Label htmlFor="password">Password*</Label>
+            <Input ref={passwordRef} id="password" type="password" />
           </div>
-          <Button type="submit" className="w-full">
-            Create an account
+          <Button onClick={handleRegisterSubmit} type="submit" className="w-full" disabled={mutation.isPending}>
+          {
+              mutation.isPending && <LoaderCircle className="animate-spin" />
+            }
+          
+            <span className="ml-2">Create an account</span>
+            
           </Button>
           
         </div>
