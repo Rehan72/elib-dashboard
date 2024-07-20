@@ -2,11 +2,15 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
+import useTokenStore from "@/store"
 import {  Bell, CircleUser, Package, Package2, Search, ShoppingCart } from "lucide-react"
-import { Link, Outlet } from "react-router-dom"
+import { Link, Navigate, Outlet } from "react-router-dom"
 
 function DashboardLayout() {
-
+  const token = useTokenStore((state)=>state.token)
+ if(!token){
+  return <Navigate to={'/auth/login'} replace />
+ }
   const logOut=()=>{
     console.log("Logout");
     

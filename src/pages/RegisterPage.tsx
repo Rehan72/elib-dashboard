@@ -7,16 +7,19 @@ import { useRef } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { register } from "@/http/api"
 import { LoaderCircle } from "lucide-react"
+import useTokenStore from "@/store"
 function RegisterPage() {
   const navigate=useNavigate()
+  const setToken = useTokenStore((store) => store.setToken)
   const nameRef=useRef<HTMLInputElement>(null)
   const emailRef=useRef<HTMLInputElement>(null);
   const passwordRef=useRef<HTMLInputElement>(null);
   // Mutations
   const mutation = useMutation({
     mutationFn: register,
-    onSuccess: () => {
+    onSuccess: (response) => {
      console.log("Relisted successful");
+     setToken(response.data.accessToken)
      navigate('/auth/login');
     },
 
