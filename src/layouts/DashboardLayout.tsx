@@ -7,12 +7,13 @@ import {  Bell, CircleUser, Package, Package2, Search, ShoppingCart } from "luci
 import { Link, Navigate, Outlet } from "react-router-dom"
 
 function DashboardLayout() {
-  const token = useTokenStore((state)=>state.token)
+  const {token,setToken} = useTokenStore((state)=>state)
  if(!token){
   return <Navigate to={'/auth/login'} replace />
  }
   const logOut=()=>{
     console.log("Logout");
+    setToken("")
     
   }
   return (
