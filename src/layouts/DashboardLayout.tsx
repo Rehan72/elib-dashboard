@@ -6,6 +6,11 @@ import {  Bell, CircleUser, Package, Package2, Search, ShoppingCart } from "luci
 import { Link, Outlet } from "react-router-dom"
 
 function DashboardLayout() {
+
+  const logOut=()=>{
+    console.log("Logout");
+    
+  }
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-muted/40 md:block">
@@ -93,7 +98,7 @@ function DashboardLayout() {
               <DropdownMenuItem>Settings</DropdownMenuItem>
               <DropdownMenuItem>Support</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Logout</DropdownMenuItem>
+              <DropdownMenuItem onClick={logOut}>Logout</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </header>
