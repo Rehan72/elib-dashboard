@@ -13,7 +13,10 @@ import { login } from "@/http/api"
 import useTokenStore from "@/store"
 import { useMutation } from "@tanstack/react-query"
 import { LoaderCircle } from "lucide-react"
-import { useRef } from "react"
+import { EyeOff } from 'lucide-react'
+import { Eye } from 'lucide-react';
+import { Mail } from 'lucide-react'
+import { useRef, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 
 function LoginPage() {
@@ -22,6 +25,7 @@ function LoginPage() {
   const setToken = useTokenStore((store) => store.setToken)
   const emailRef=useRef<HTMLInputElement>(null);
   const passwordRef=useRef<HTMLInputElement>(null);
+  const [showPassword, setShowPassword] = useState(false);
   // Mutations
   const mutation = useMutation({
     mutationFn: login,
@@ -44,6 +48,10 @@ function LoginPage() {
     }
     mutation.mutate({email, password});
   };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
     return (
       <section className="flex justify-center items-center h-screen">
         <Card className="w-full max-w-sm">
@@ -55,13 +63,30 @@ function LoginPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
-          <div className="grid gap-2">
+        <label className="relative text-gray-400 focus-within:text-gray-600 block">
+          <Mail/>
+
+
+
+<Input ref={emailRef} id="email" type="email" placeholder="m@example.com" required />
+</label>
+          {/* <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
             <Input ref={emailRef} id="email" type="email" placeholder="m@example.com" required />
-          </div>
+          </div> */}
           <div className="grid gap-2">
             <Label htmlFor="password">Password</Label>
-            <Input ref={passwordRef} id="password" type="password" required />
+            <span
+            onClick={togglePasswordVisibility}
+            className="inset-y-0 right-0 pr-3 flex items-center"
+          >
+            {
+               showPassword ? <EyeOff/> : <Eye/>
+            }
+             
+          </span> 
+            <Input ref={passwordRef} id="password"  type={showPassword ? 'text' : 'password'} required className="pr-10" />
+            
           </div>
         </CardContent>
         <CardFooter>

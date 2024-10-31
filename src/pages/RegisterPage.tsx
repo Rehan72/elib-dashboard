@@ -29,7 +29,7 @@ function RegisterPage() {
     const name = nameRef.current?.value
     const email=emailRef?.current?.value;
     const password=passwordRef?.current?.value;
- console.log("Data", email, password);
+ 
  
     //Make server call
     if(!name || !email || !password){
